@@ -5,6 +5,7 @@
 
   <p>
     <a href="https://www.npmjs.com/package/serialize-query-params"><img alt="npm" src="https://img.shields.io/npm/v/serialize-query-params.svg"></a>
+    <a href="https://travis-ci.com/pbeshai/serialize-query-params"><img alt="Travis (.com)" src="https://img.shields.io/travis/com/pbeshai/serialize-query-params.svg"></a>
   </p>
 <hr />
 
