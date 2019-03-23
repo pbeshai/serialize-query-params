@@ -1,0 +1,48 @@
+{
+  "name": "serialize-query-params",
+  "version": "0.1.0",
+  "description": "A library for simplifying encoding and decoding URL query parameters.",
+  "main": "lib/index.js",
+  "files": [
+    "lib/"
+  ],
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "NODE_ENV=development tsc -w",
+    "prepublishOnly": "npm run test && npm run build",
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "test-coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pbeshai/serialize-query-params.git"
+  },
+  "keywords": [
+    "serialization",
+    "serialize",
+    "deserialize",
+    "encode",
+    "decode",
+    "url",
+    "query",
+    "parameters",
+    "query param"
+  ],
+  "author": "Peter Beshai <peter.beshai@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^24.0.11",
+    "babel-jest": "^24.5.0",
+    "jest": "^24.5.0",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "query-string": "^6.3.0"
+  }
+}
