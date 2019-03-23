@@ -39,6 +39,9 @@ describe('encodeQueryParams', () => {
     );
     expect(encodedQuery).toEqual({
       foo: '123',
+      bar: '555', // unconfigured defaults to string
+      baz: 'a,b,c', // unconfigured defaults to string
+      box: 'a,b,c', // unconfigured defaults to string
     });
   });
 
@@ -52,6 +55,20 @@ describe('encodeQueryParams', () => {
     );
     expect(encodedQuery).toEqual({
       bar: '555',
+    });
+  });
+
+  it('returns nully values as undefined', () => {
+    const encodedQuery = encodeQueryParams(
+      {
+        foo: StringParam,
+        bar: NumberParam,
+      },
+      { bar: null, foo: undefined }
+    );
+    expect(encodedQuery).toEqual({
+      bar: undefined,
+      foo: undefined,
     });
   });
 });

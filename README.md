@@ -9,7 +9,6 @@
 <hr />
 
 <a href="#installation">Installation</a> | 
-<a href="#usage">Usage</a> | 
 <a href="#api">API</a> |
 <a href="https://peterbeshai.com/use-query-params/">useQueryParams</a>
 
@@ -26,20 +25,17 @@ Using npm:
 $ npm install --save serialize-query-params
 ```
 
-
-### Usage
-
-Add the hook to your component. There are two options: `useQueryParam`:
-
 ### API
 
 - [Param Types](#param-types)
+- [decodeQueryParams](#decodequeryparams)
+- [encodeQueryParams](#encodequeryparams)
 - [updateLocation](#usequeryparam)
 - [updateLocationIn](#usequeryparams-1)
-- [encodeQueryParams](#encodequeryparams)
 - [Type Definitions](https://github.com/pbeshai/serialize-query-params/blob/master/src/types.ts)
 - [Serialization Utility Functions](https://github.com/pbeshai/serialize-query-params/blob/master/src/serialize.ts)
 
+For convenience, this serialize-query-params exports `parse`, `stringify`, `extract`, and `parseUrl` functions from the [query-string](https://github.com/sindresorhus/query-string) library.
 
 
 #### Param Types
@@ -74,15 +70,47 @@ import {
 
 /** Uses a comma to delimit entries. e.g. ['a', 'b'] => qp?=a,b */
 const CommaArrayParam = {
-  encode: (array: string[] | null | undefined) => 
+  encode: (array: string[] | null | undefined): string | undefined => 
     encodeDelimitedArray(array, ','),
 
-  decode: (arrayStr: string | string[] | null | undefined) => 
+  decode: (arrayStr: string | string[] | null | undefined): string[] | undefined => 
     decodeDelimitedArray(arrayStr, ',')
 };
 ```
 
 <br/>
+
+#### decodeQueryParams
+
+```js
+decodeQueryParams<QPCMap extends QueryParamConfigMap>(
+  paramConfigMap: QPCMap,
+  encodedQuery: Partial<EncodedValueMap<QPCMap>>
+): Partial<DecodedValueMap<QPCMap>>
+```
+
+Convert the values in query from strings to their natural types via the
+decode functions configured in paramConfigMap. 
+
+**Example**
+
+```js
+import {
+  stringify,
+  decodeQueryParams,
+  NumberParam,
+} from 'serialize-query-params';
+
+// encode each parameter according to the configuration
+const decodedQuery = decodeQueryParams(
+  { foo: NumberParam, bar: DelimitedArrayParam },
+  { foo: '123', bar: 'a_b' }
+);
+// produces: { foo: 123, bar: ['a', 'b'] }
+```
+
+<br/>
+
 
 #### encodeQueryParams
 
@@ -90,7 +118,7 @@ const CommaArrayParam = {
 encodeQueryParams<QPCMap extends QueryParamConfigMap>(
   paramConfigMap: QPCMap,
   query: Partial<DecodedValueMap<QPCMap>>
-): EncodedQueryWithNulls
+): Partial<EncodedValueMap<QPCMap>>
 ```
 
 Convert the values in query to strings via the encode functions configured
@@ -100,15 +128,82 @@ query parameters.
 **Example**
 
 ```js
-import { stringify } from 'query-string';
-import { encodeQueryParams, NumberParam } from 'serialize-query-params';
+import {
+  stringify,
+  encodeQueryParams,
+  NumberParam,
+} from 'serialize-query-params';
 
 // encode each parameter according to the configuration
-const encodedQuery = encodeQueryParams({ foo: NumberParam }, { foo });
+const encodedQuery = encodeQueryParams(
+  { foo: NumberParam, bar: DelimitedArrayParam },
+  { foo: 123, bar: ['a', 'b'] }
+);
+// produces: { foo: '123', bar: 'a_b' }
+
 const link = `/?${stringify(encodedQuery)}`;
 ```
 
 <br/>
+
+
+
+#### updateLocation
+
+```js
+export function updateLocation(
+  encodedQuery: EncodedQueryWithNulls,
+  location: Location
+): Location {
+```
+
+Updates a location object to have a new query string (the `search` field) based 
+on the encoded query parameters passed in via `encodedQuery`. Parameters not
+specified in `encodedQuery` will be dropped from the URL.
+
+**Example**
+
+```js
+import { updateLocation } from 'serialize-query-params';
+
+// location has search: ?foo=123&bar=abc
+const newLocation = updateLocation({ foo: '555' }, location);
+
+// newLocation has search: ?foo=555
+// note that unspecified query parameters (bar in this case) are not retained.
+```
+
+<br/>
+
+
+#### updateInLocation
+
+```js
+export function updateInLocation(
+  encodedQueryReplacements: EncodedQueryWithNulls,
+  location: Location
+): Location {
+```
+
+Updates a location object to have a new query string (the `search` field) based 
+on the encoded query parameters passed in via `encodedQueryReplacements`. Only
+parameters specified in `encodedQueryReplacements` are affected by this update,
+all other parameters are retained.
+
+**Example**
+
+```js
+import { updateInLocation } from 'serialize-query-params';
+
+// location has search: ?foo=123&bar=abc
+const newLocation = updateLocation({ foo: '555' }, location);
+
+// newLocation has search: ?foo=555&bar=abc
+// note that unspecified query parameters (bar in this case) are retained.
+```
+
+<br/>
+
 
 
 ### Development

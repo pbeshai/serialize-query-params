@@ -40,3 +40,10 @@ export interface QueryParamConfigMap {
 export type DecodedValueMap<QPCMap extends QueryParamConfigMap> = {
   [P in keyof QPCMap]: ReturnType<QPCMap[P]['decode']>
 };
+
+/**
+ * Mapping from a query parameter name to it's encoded value type
+ */
+export type EncodedValueMap<QPCMap extends QueryParamConfigMap> = {
+  [P in keyof QPCMap]: string | string[] | null | undefined
+};

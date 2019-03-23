@@ -1,4 +1,4 @@
-import { updateLocation, updateInLocation } from '../updateLocation';
+import { updateLocation, updateInLocation } from '../index';
 import { makeMockLocation } from './helpers';
 import { parse } from 'query-string';
 

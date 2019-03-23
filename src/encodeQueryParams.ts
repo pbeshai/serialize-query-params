@@ -1,8 +1,4 @@
-import {
-  EncodedQueryWithNulls,
-  DecodedValueMap,
-  QueryParamConfigMap,
-} from './types';
+import { DecodedValueMap, QueryParamConfigMap, EncodedValueMap } from './types';
 
 /**
  * Convert the values in query to strings via the encode functions configured
@@ -14,22 +10,33 @@ import {
 export function encodeQueryParams<QPCMap extends QueryParamConfigMap>(
   paramConfigMap: QPCMap,
   query: Partial<DecodedValueMap<QPCMap>>
-): EncodedQueryWithNulls {
-  const encodedChanges: EncodedQueryWithNulls = {};
-  const changingParamNames = Object.keys(query);
-  for (const paramName of changingParamNames) {
+): Partial<EncodedValueMap<QPCMap>> {
+  const encodedQuery: Partial<EncodedValueMap<QPCMap>> = {};
+
+  const paramNames = Object.keys(query);
+  for (const paramName of paramNames) {
+    const decodedValue = query[paramName];
+    if (decodedValue == null) {
+      encodedQuery[paramName] = undefined;
+      continue;
+    }
+
     if (!paramConfigMap[paramName]) {
       if (process.env.NODE_ENV === 'development') {
         console.warn(
-          `Skipping encoding parameter ${paramName} since it was not configured.`
+          `Encoding parameter ${paramName} as string since it was not configured.`
         );
       }
-      continue;
+      // NOTE: we could just not encode it, but it is probably convenient to have
+      // it be included by default as a string type.
+      (encodedQuery as any)[paramName] = String(decodedValue);
+    } else {
+      encodedQuery[paramName] = paramConfigMap[paramName].encode(
+        query[paramName]
+      );
     }
-    encodedChanges[paramName] = paramConfigMap[paramName].encode(
-      query[paramName]
-    );
   }
-  return encodedChanges;
+
+  return encodedQuery;
 }
 export default encodeQueryParams;

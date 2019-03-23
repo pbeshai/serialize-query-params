@@ -43,6 +43,12 @@ export {
   QueryParamConfig,
   QueryParamConfigMap,
   DecodedValueMap,
+  EncodedValueMap,
 } from './types';
 
+export { updateLocation, updateInLocation } from './updateLocation';
 export { encodeQueryParams } from './encodeQueryParams';
+export { decodeQueryParams } from './decodeQueryParams';
+
+// for convenience
+export { stringify, parse, parseUrl, extract } from 'query-string';

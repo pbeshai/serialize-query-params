@@ -25,13 +25,13 @@ function filterNully(query: EncodedQueryWithNulls): EncodedQuery {
 }
 
 /**
- * Update a location, wiping out parameters not included in newQuery
+ * Update a location, wiping out parameters not included in encodedQuery
  */
 export function updateLocation(
-  newQuery: EncodedQueryWithNulls,
+  encodedQuery: EncodedQueryWithNulls,
   location: Location
-) {
-  const encodedSearchString = stringify(filterNully(newQuery));
+): Location {
+  const encodedSearchString = stringify(filterNully(encodedQuery));
   const newLocation: Location & { key: string } = {
     ...location,
     key: `${Date.now()}`, // needed for some routers (e.g. react-router)
@@ -45,16 +45,16 @@ export function updateLocation(
  * Update a location while retaining existing parameters
  */
 export function updateInLocation(
-  queryReplacements: EncodedQueryWithNulls,
+  encodedQueryReplacements: EncodedQueryWithNulls,
   location: Location
-) {
+): Location {
   // if a query is there, use it, otherwise parse the search string
   const currQuery =
     (location as any).query || parseQueryString(location.search);
 
   const newQuery = {
     ...currQuery,
-    ...queryReplacements,
+    ...encodedQueryReplacements,
   };
 
   return updateLocation(filterNully(newQuery), location);
