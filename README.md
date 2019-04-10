@@ -36,7 +36,7 @@ $ npm install --save serialize-query-params
 - [Type Definitions](https://github.com/pbeshai/serialize-query-params/blob/master/src/types.ts)
 - [Serialization Utility Functions](https://github.com/pbeshai/serialize-query-params/blob/master/src/serialize.ts)
 
-For convenience, this serialize-query-params exports `parse`, `stringify`, `extract`, and `parseUrl` functions from the [query-string](https://github.com/sindresorhus/query-string) library.
+For convenience, serialize-query-params exports `parse`, `stringify`, `extract`, and `parseUrl` functions from the [query-string](https://github.com/sindresorhus/query-string) library.
 
 
 #### Param Types
