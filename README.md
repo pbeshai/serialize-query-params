@@ -54,6 +54,7 @@ Examples in this table assume query parameter named `qp`.
 | ArrayParam | string[] | `['a','b','c']` | `?qp=a&qp=b&qp=c` |
 | JsonParam | any | `{ foo: 'bar' }` | `?qp=%7B%22foo%22%3A%22bar%22%7D` |
 | DateParam | Date | `Date(2019, 2, 1)` | `?qp=2019-03-01` |
+| DateTimeParam | Date | `Date(2019, 2, 1)` | `?qp=2019-02-28T22:00:00.000Z` |
 | BooleanParam | boolean | `true` | `?qp=1` |
 | NumericObjectParam | { key: number } | `{ foo: 1, bar: 2 }` | `?qp=foo-1_bar-2` |
 | DelimitedArrayParam | string[] | `['a','b','c']` | `?qp=a_b_c'` |

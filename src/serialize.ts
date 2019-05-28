@@ -61,6 +61,52 @@ export function decodeDate(
 }
 
 /**
+ * Encodes a date as a string in ISO 8601 ("2019-05-28T10:58:40Z") format.
+ *
+ * @param {Date} date
+ * @return {String} the encoded date
+ */
+export function encodeDateTime(date: Date | null | undefined): string | undefined {
+  if (date == null) {
+    return undefined;
+  }
+
+  return date.toISOString();
+}
+
+/**
+ * Converts a date in the https://en.wikipedia.org/wiki/ISO_8601 format.
+ * For allowed inputs see specs:
+ *  - https://tools.ietf.org/html/rfc2822#page-14
+ *  - http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15
+ *
+ * If an array is provided, only the first entry is used.
+ *
+ * @param  {String} input String date form like '1995-12-17T03:24:00'
+ * @return {Date} parsed date
+ */
+export function decodeDateTime(
+    input: string | string[] | null | undefined
+): Date | undefined {
+  if (input == null || !input.length) {
+    return undefined;
+  }
+
+  const dateString = input instanceof Array ? input[0] : input;
+  if (dateString == null || !dateString.length) {
+    return undefined;
+  }
+
+  const decoded = new Date(dateString);
+
+  if (isNaN(decoded.getTime())) {
+    return undefined;
+  }
+
+  return decoded;
+}
+
+/**
  * Encodes a boolean as a string. true -> "1", false -> "0".
  *
  * @param {Boolean} bool

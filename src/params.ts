@@ -80,6 +80,17 @@ export const DateParam: QueryParamConfig<
 };
 
 /**
+ * For dates in simplified extended ISO format (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ)
+ */
+export const DateTimeParam: QueryParamConfig<
+    Date | null | undefined,
+    Date | undefined
+    > = {
+  encode: Serialize.encodeDateTime,
+  decode: Serialize.decodeDateTime,
+};
+
+/**
  * For boolean values: 1 = true, 0 = false
  */
 export const BooleanParam: QueryParamConfig<
