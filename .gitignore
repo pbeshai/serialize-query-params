@@ -84,4 +84,5 @@ typings/
 
 
 lib/
+esm/
 .DS_Store
