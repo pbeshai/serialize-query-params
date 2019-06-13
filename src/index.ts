@@ -31,6 +31,7 @@ export {
   NumericArrayParam,
   JsonParam,
   DateParam,
+  DateTimeParam,
   BooleanParam,
   NumericObjectParam,
   DelimitedArrayParam,
