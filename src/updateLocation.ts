@@ -32,10 +32,14 @@ export function updateLocation(
   location: Location
 ): Location {
   const encodedSearchString = stringify(filterNully(encodedQuery));
-  const newLocation: Location & { key: string } = {
+  const newLocation: Location & {
+    key: string;
+    query: EncodedQueryWithNulls;
+  } = {
     ...location,
     key: `${Date.now()}`, // needed for some routers (e.g. react-router)
     search: encodedSearchString.length ? `?${encodedSearchString}` : '',
+    query: encodedQuery, // needed for some routers (e.g. found)
   };
 
   return newLocation;
