@@ -41,7 +41,7 @@ export function decodeDate(
     return undefined;
   }
 
-  const parts = dateString.split('-') as any;
+  const parts = dateString.split("-") as any;
   // may only be a year so won't even have a month
   if (parts[1] != null) {
     parts[1] -= 1; // Note: months are 0-based
@@ -66,7 +66,9 @@ export function decodeDate(
  * @param {Date} date
  * @return {String} the encoded date
  */
-export function encodeDateTime(date: Date | null | undefined): string | undefined {
+export function encodeDateTime(
+  date: Date | null | undefined
+): string | undefined {
   if (date == null) {
     return undefined;
   }
@@ -86,7 +88,7 @@ export function encodeDateTime(date: Date | null | undefined): string | undefine
  * @return {Date} parsed date
  */
 export function decodeDateTime(
-    input: string | string[] | null | undefined
+  input: string | string[] | null | undefined
 ): Date | undefined {
   if (input == null || !input.length) {
     return undefined;
@@ -119,7 +121,7 @@ export function encodeBoolean(
     return undefined;
   }
 
-  return bool ? '1' : '0';
+  return bool ? "1" : "0";
 }
 
 /**
@@ -140,9 +142,9 @@ export function decodeBoolean(
 
   const boolStr = input instanceof Array ? input[0] : input;
 
-  if (boolStr === '1') {
+  if (boolStr === "1") {
     return true;
-  } else if (boolStr === '0') {
+  } else if (boolStr === "0") {
     return false;
   }
 
@@ -183,7 +185,7 @@ export function decodeNumber(
 
   const numStr = input instanceof Array ? input[0] : input;
 
-  if (numStr == null || numStr === '') {
+  if (numStr == null || numStr === "") {
     return undefined;
   }
 
@@ -317,7 +319,7 @@ export function decodeArray(
   }
 
   return input
-    .map(item => (item === '' ? undefined : item))
+    .map(item => (item === "" ? undefined : item))
     .filter(item => item !== undefined) as string[];
 }
 
@@ -370,7 +372,7 @@ export function decodeNumericArray(
  */
 export function encodeDelimitedArray(
   array: string[] | null | undefined,
-  entrySeparator = '_'
+  entrySeparator = "_"
 ): string | undefined {
   if (!array) {
     return undefined;
@@ -392,7 +394,7 @@ export function encodeDelimitedArray(
  */
 export function decodeDelimitedArray(
   input: string | string[] | null | undefined,
-  entrySeparator = '_'
+  entrySeparator = "_"
 ): string[] | undefined {
   if (input == null) {
     return undefined;
@@ -406,7 +408,7 @@ export function decodeDelimitedArray(
 
   return arrayStr
     .split(entrySeparator)
-    .map(item => (item === '' ? undefined : item))
+    .map(item => (item === "" ? undefined : item))
     .filter(item => item !== undefined) as string[];
 }
 
@@ -433,7 +435,7 @@ export const encodeDelimitedNumericArray = encodeDelimitedArray as (
  */
 export function decodeDelimitedNumericArray(
   arrayStr: string | string[] | null | undefined,
-  entrySeparator = '_'
+  entrySeparator = "_"
 ): number[] | undefined {
   const decoded = decodeDelimitedArray(arrayStr, entrySeparator);
 
@@ -459,8 +461,8 @@ export function decodeDelimitedNumericArray(
  */
 export function encodeObject(
   obj: { [key: string]: string | number | undefined } | null | undefined,
-  keyValSeparator = '-',
-  entrySeparator = '_'
+  keyValSeparator = "-",
+  entrySeparator = "_"
 ): string | undefined {
   if (!obj || !Object.keys(obj).length) {
     return undefined;
@@ -486,8 +488,8 @@ export function encodeObject(
  */
 export function decodeObject(
   input: string | string[] | null | undefined,
-  keyValSeparator = '-',
-  entrySeparator = '_'
+  keyValSeparator = "-",
+  entrySeparator = "_"
 ): { [key: string]: string | undefined } | undefined {
   if (input == null) {
     return undefined;
@@ -498,11 +500,27 @@ export function decodeObject(
   if (!objStr || !objStr.length) {
     return undefined;
   }
+
   const obj: { [key: string]: string | undefined } = {};
 
+  /**
+   * Fixing https://github.com/pbeshai/use-query-params/issues/67
+   * - The original code returns `undefined` for `foo--55_jim--100_iros--94`
+   * - See also the `produces the correct value for negative numbers` test in `serialize-test.ts`
+   */
+  const keyValSeparatorForNegativeNumber = "--";
+
   objStr.split(entrySeparator).forEach(entryStr => {
-    const [key, value] = entryStr.split(keyValSeparator);
-    obj[key] = value === '' ? undefined : value;
+    const [negativeKey, negativeValue] = entryStr.split(
+      keyValSeparatorForNegativeNumber
+    );
+
+    if (negativeValue) {
+      obj[negativeKey] = negativeValue === "" ? undefined : `-${negativeValue}`;
+    } else {
+      const [key, value] = entryStr.split(keyValSeparator);
+      obj[key] = value === "" ? undefined : value;
+    }
   });
 
   return obj;
@@ -539,16 +557,21 @@ export const encodeNumericObject = encodeObject as (
  */
 export function decodeNumericObject(
   input: string | string[] | null | undefined,
-  keyValSeparator = '-',
-  entrySeparator = '_'
+  keyValSeparator = "-",
+  entrySeparator = "_"
 ): { [key: string]: number | undefined } | undefined {
   const decoded:
     | { [key: string]: number | string | undefined }
     | undefined = decodeObject(input, keyValSeparator, entrySeparator);
 
+  //console.log("input:", input);
+  //console.log("decoded:", decoded);
+
   if (!decoded) {
     return undefined;
   }
+
+  //console.log("x");
 
   // convert to numbers
   Object.keys(decoded).forEach(key => {
