@@ -245,7 +245,9 @@ describe('serialize', () => {
     });
 
     it('handles malformed input', () => {
-      expect(decodeObject('foo-bar-jim-grill')).toEqual({ foo: 'bar' });
+      expect(decodeObject('foo-bar-jim-grill')).toEqual({
+        foo: 'bar-jim-grill',
+      });
       expect(decodeObject('foo_bar_jim_grill')).toEqual({
         foo: undefined,
         bar: undefined,
@@ -337,6 +339,16 @@ describe('serialize', () => {
       expect(output).toEqual(expectedOutput);
       expect(decodeNumericObject(undefined)).not.toBeDefined();
       expect(decodeNumericObject('')).not.toBeDefined();
+    });
+
+    it('produces the correct value for negative numbers', () => {
+      const output = decodeNumericObject('foo--55_jim--100_iros--94');
+      const expectedOutput = {
+        foo: -55,
+        jim: -100,
+        iros: -94,
+      };
+      expect(output).toEqual(expectedOutput);
     });
 
     it('handles malformed input', () => {

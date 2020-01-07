@@ -66,7 +66,9 @@ export function decodeDate(
  * @param {Date} date
  * @return {String} the encoded date
  */
-export function encodeDateTime(date: Date | null | undefined): string | undefined {
+export function encodeDateTime(
+  date: Date | null | undefined
+): string | undefined {
   if (date == null) {
     return undefined;
   }
@@ -86,7 +88,7 @@ export function encodeDateTime(date: Date | null | undefined): string | undefine
  * @return {Date} parsed date
  */
 export function decodeDateTime(
-    input: string | string[] | null | undefined
+  input: string | string[] | null | undefined
 ): Date | undefined {
   if (input == null || !input.length) {
     return undefined;
@@ -498,10 +500,12 @@ export function decodeObject(
   if (!objStr || !objStr.length) {
     return undefined;
   }
+
   const obj: { [key: string]: string | undefined } = {};
 
+  const keyValSeparatorRegExp = new RegExp(`${keyValSeparator}(.+)`);
   objStr.split(entrySeparator).forEach(entryStr => {
-    const [key, value] = entryStr.split(keyValSeparator);
+    const [key, value] = entryStr.split(keyValSeparatorRegExp);
     obj[key] = value === '' ? undefined : value;
   });
 
@@ -546,9 +550,14 @@ export function decodeNumericObject(
     | { [key: string]: number | string | undefined }
     | undefined = decodeObject(input, keyValSeparator, entrySeparator);
 
+  //console.log("input:", input);
+  //console.log("decoded:", decoded);
+
   if (!decoded) {
     return undefined;
   }
+
+  //console.log("x");
 
   // convert to numbers
   Object.keys(decoded).forEach(key => {
