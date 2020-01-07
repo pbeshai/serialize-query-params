@@ -503,24 +503,10 @@ export function decodeObject(
 
   const obj: { [key: string]: string | undefined } = {};
 
-  /**
-   * Fixing https://github.com/pbeshai/use-query-params/issues/67
-   * - The original code returns `undefined` for `foo--55_jim--100_iros--94`
-   * - See also the `produces the correct value for negative numbers` test in `serialize-test.ts`
-   */
-  const keyValSeparatorForNegativeNumber = '--';
-
+  const keyValSeparatorRegExp = new RegExp(`${keyValSeparator}(.+)`);
   objStr.split(entrySeparator).forEach(entryStr => {
-    const [negativeKey, negativeValue] = entryStr.split(
-      keyValSeparatorForNegativeNumber
-    );
-
-    if (negativeValue) {
-      obj[negativeKey] = negativeValue === '' ? undefined : `-${negativeValue}`;
-    } else {
-      const [key, value] = entryStr.split(keyValSeparator);
-      obj[key] = value === '' ? undefined : value;
-    }
+    const [key, value] = entryStr.split(keyValSeparatorRegExp);
+    obj[key] = value === '' ? undefined : value;
   });
 
   return obj;

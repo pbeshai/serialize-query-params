@@ -245,7 +245,9 @@ describe('serialize', () => {
     });
 
     it('handles malformed input', () => {
-      expect(decodeObject('foo-bar-jim-grill')).toEqual({ foo: 'bar' });
+      expect(decodeObject('foo-bar-jim-grill')).toEqual({
+        foo: 'bar-jim-grill',
+      });
       expect(decodeObject('foo_bar_jim_grill')).toEqual({
         foo: undefined,
         bar: undefined,
