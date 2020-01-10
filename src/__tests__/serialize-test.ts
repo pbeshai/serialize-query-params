@@ -223,8 +223,8 @@ describe('serialize', () => {
 
   describe('encodeObject', () => {
     it('produces the correct value', () => {
-      const input = { test: 'bar', foo: '94' };
-      const expectedOutput = 'test-bar_foo-94';
+      const input = { test: 'bar', foo: '94', bar: '' , baz: '-baz-'};
+      const expectedOutput = 'test-bar_foo-94_bar-_baz--baz-';
       expect(encodeObject(input, '-', '_')).toBe(expectedOutput);
       expect(encodeObject(undefined)).not.toBeDefined();
       expect(encodeObject({})).not.toBeDefined();
@@ -233,11 +233,13 @@ describe('serialize', () => {
 
   describe('decodeObject', () => {
     it('produces the correct value', () => {
-      const output = decodeObject('foo-bar_jim-grill_iros-91');
+      const output = decodeObject('foo-bar_jim-grill_iros-91_baz-_t--x-');
       const expectedOutput = {
         foo: 'bar',
         jim: 'grill',
         iros: '91',
+        baz: '',
+        t: '-x-'
       };
       expect(output).toEqual(expectedOutput);
       expect(decodeObject(undefined)).not.toBeDefined();

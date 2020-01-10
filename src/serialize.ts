@@ -490,7 +490,7 @@ export function decodeObject(
   input: string | string[] | null | undefined,
   keyValSeparator = '-',
   entrySeparator = '_'
-): { [key: string]: string | undefined } | undefined {
+): { [key: string]: string } | undefined {
   if (input == null) {
     return undefined;
   }
@@ -501,12 +501,12 @@ export function decodeObject(
     return undefined;
   }
 
-  const obj: { [key: string]: string | undefined } = {};
+  const obj: { [key: string]: string } = {};
 
-  const keyValSeparatorRegExp = new RegExp(`${keyValSeparator}(.+)`);
+  const keyValSeparatorRegExp = new RegExp(`${keyValSeparator}(.*)`);
   objStr.split(entrySeparator).forEach(entryStr => {
     const [key, value] = entryStr.split(keyValSeparatorRegExp);
-    obj[key] = value === '' ? undefined : value;
+    obj[key] = value;
   });
 
   return obj;
