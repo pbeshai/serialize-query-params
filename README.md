@@ -16,7 +16,7 @@
 </div>
 <hr/>
 
-Used in React with [use-query-params](https://github.com/pbeshai/url-query-params).
+Used in React with [use-query-params](https://github.com/pbeshai/use-query-params).
 
 ### Installation
 
