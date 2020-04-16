@@ -2,14 +2,14 @@
  * Encoded query parameters (all strings)
  */
 export interface EncodedQuery {
-  [key: string]: string | string[];
+  [key: string]: string | (string | null)[];
 }
 
 /**
  * Encoded query parameters, possibly including null or undefined values
  */
 export interface EncodedQueryWithNulls {
-  [key: string]: string | string[] | null | undefined;
+  [key: string]: string | (string | null)[] | null | undefined;
 }
 /**
  * Configuration for a query param specifying how to encode it
@@ -21,10 +21,10 @@ export interface EncodedQueryWithNulls {
  */
 export interface QueryParamConfig<D, D2 = D> {
   /** Convert the query param value to a string */
-  encode: (value: D) => string | string[] | undefined;
+  encode: (value: D) => string | (string | null)[] | undefined;
 
   /** Convert the query param string value to its native type */
-  decode: (value: string | string[]) => D2;
+  decode: (value: string | (string | null)[] | null) => D2;
 }
 
 /**
@@ -38,12 +38,12 @@ export interface QueryParamConfigMap {
  * Mapping from a query parameter name to it's decoded value type
  */
 export type DecodedValueMap<QPCMap extends QueryParamConfigMap> = {
-  [P in keyof QPCMap]: ReturnType<QPCMap[P]['decode']>
+  [P in keyof QPCMap]: ReturnType<QPCMap[P]['decode']>;
 };
 
 /**
  * Mapping from a query parameter name to it's encoded value type
  */
 export type EncodedValueMap<QPCMap extends QueryParamConfigMap> = {
-  [P in keyof QPCMap]: string | string[] | null | undefined
+  [P in keyof QPCMap]: string | (string | null)[] | null | undefined;
 };

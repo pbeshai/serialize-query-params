@@ -2,36 +2,14 @@ import { stringify, parse as parseQueryString, parseUrl } from 'query-string';
 import { EncodedQuery, EncodedQueryWithNulls } from './types';
 
 /**
- * remove query params that are nully or an empty strings.
- * note: these values are assumed to be already encoded as strings.
- */
-function filterNully(query: EncodedQueryWithNulls): EncodedQuery {
-  const filteredQuery: EncodedQuery = Object.keys(query).reduce(
-    (queryAccumulator: any, queryParam: string) => {
-      // get encoded value for this param
-      const encodedValue = query[queryParam];
-
-      // if it isn't null or empty string, add it to the accumulated obj
-      if (encodedValue != null && encodedValue !== '') {
-        queryAccumulator[queryParam] = encodedValue;
-      }
-
-      return queryAccumulator;
-    },
-    {}
-  );
-
-  return filteredQuery;
-}
-
-/**
  * Update a location, wiping out parameters not included in encodedQuery
+ * If a param is set to undefined it will be removed from the URL.
  */
 export function updateLocation(
   encodedQuery: EncodedQueryWithNulls,
   location: Location
 ): Location {
-  const encodedSearchString = stringify(filterNully(encodedQuery));
+  const encodedSearchString = stringify(encodedQuery);
   const search = encodedSearchString.length ? `?${encodedSearchString}` : '';
   const href = parseUrl(location.href).url + search;
 
@@ -50,7 +28,8 @@ export function updateLocation(
 }
 
 /**
- * Update a location while retaining existing parameters
+ * Update a location while retaining existing parameters.
+ * If a param is set to undefined it will be removed from the URL.
  */
 export function updateInLocation(
   encodedQueryReplacements: EncodedQueryWithNulls,
@@ -65,5 +44,5 @@ export function updateInLocation(
     ...encodedQueryReplacements,
   };
 
-  return updateLocation(filterNully(newQuery), location);
+  return updateLocation(newQuery, location);
 }

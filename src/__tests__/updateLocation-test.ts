@@ -4,12 +4,31 @@ import { parse } from 'query-string';
 
 describe('updateLocation', () => {
   it('creates the correct search string', () => {
-    const location = makeMockLocation({ foo: 'abc', bar: '555', baz: '222' });
-    const newLocation = updateLocation({ foo: 'xxx' }, location);
-    expect(newLocation.search).toBe('?foo=xxx');
+    const location = makeMockLocation({
+      foo: 'abc',
+      bar: '555',
+      baz: '222',
+    });
+    const newLocation = updateLocation(
+      {
+        foo: 'xxx',
+        pgb: null,
+        und: undefined,
+        emp: '',
+      },
+      location
+    );
+    expect(parse(newLocation.search)).toEqual({
+      foo: 'xxx',
+      pgb: null,
+      emp: '',
+    });
     expect(newLocation.key).toBeDefined();
     expect(newLocation.key).not.toBe((location as any).key);
-    expect(newLocation.href).toBe('http://localhost:3000/?foo=xxx');
+    // include updated search string
+    expect(newLocation.href).toBe(
+      'http://localhost:3000/' + newLocation.search
+    );
 
     // check multiple params
     expect(
@@ -34,11 +53,14 @@ describe('updateLocation', () => {
 describe('updateInLocation', () => {
   it('creates the correct search string', () => {
     const location = makeMockLocation({ foo: 'abc', bar: '555', baz: '222' });
-    const newLocation = updateInLocation({ foo: 'xxx' }, location);
+    const newLocation = updateInLocation(
+      { foo: 'xxx', pgb: null, baz: undefined, bar: '' },
+      location
+    );
     expect(parse(newLocation.search)).toEqual({
       foo: 'xxx',
-      bar: '555',
-      baz: '222',
+      bar: '',
+      pgb: null,
     });
     expect(newLocation.key).toBeDefined();
     expect(newLocation.key).not.toBe((location as any).key);

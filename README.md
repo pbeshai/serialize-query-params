@@ -43,7 +43,13 @@ There is a peer dependency on [query-string](https://github.com/sindresorhus/que
 #### Param Types
 See [all param definitions here](https://github.com/pbeshai/serialize-query-params/blob/master/src/params.ts). You can define your own parameter types by creating an object with an `encode` and a `decode` function. See the existing definitions for examples.
 
-Note that all nully values will encode and decode as `undefined`.
+Note that all null and empty values are typically treated as follows:
+
+| value | encoding |
+| --- | --- |
+| `null` | `?foo` |
+| `""` | `?foo=` |
+| `undefined` | `?` (removed from URL) |
 
 Examples in this table assume query parameter named `qp`.
 

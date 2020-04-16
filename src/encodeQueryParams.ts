@@ -16,7 +16,7 @@ export function encodeQueryParams<QPCMap extends QueryParamConfigMap>(
   const paramNames = Object.keys(query);
   for (const paramName of paramNames) {
     const decodedValue = query[paramName];
-    if (decodedValue == null) {
+    if (decodedValue === undefined) {
       encodedQuery[paramName as keyof QPCMap] = undefined;
       continue;
     }
@@ -29,7 +29,8 @@ export function encodeQueryParams<QPCMap extends QueryParamConfigMap>(
       }
       // NOTE: we could just not encode it, but it is probably convenient to have
       // it be included by default as a string type.
-      (encodedQuery as any)[paramName] = String(decodedValue);
+      (encodedQuery as any)[paramName] =
+        decodedValue == null ? decodedValue : String(decodedValue);
     } else {
       encodedQuery[paramName as keyof QPCMap] = paramConfigMap[
         paramName

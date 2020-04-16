@@ -64,17 +64,19 @@ describe('decodeQueryParams', () => {
     });
   });
 
-  it('returns nully values as undefined', () => {
+  it('handles nully and empty values', () => {
     const encodedQuery = decodeQueryParams(
       {
-        foo: StringParam,
-        bar: NumberParam,
+        und: StringParam,
+        emp: StringParam,
+        nul: NumberParam,
       },
-      { bar: null, foo: undefined }
+      { nul: null, emp: '', und: undefined }
     );
     expect(encodedQuery).toEqual({
-      bar: undefined,
-      foo: undefined,
+      nul: null,
+      emp: '',
+      und: undefined,
     });
   });
 });

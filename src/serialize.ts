@@ -1,12 +1,60 @@
 /**
+ * Interprets an encoded string and returns either the string or null/undefined if not available.
+ * Ignores array inputs (takes just first element in array)
+ * @param input encoded string
+ */
+function getEncodedValue(
+  input: string | (string | null)[] | null | undefined,
+  allowEmptyString?: boolean
+): string | null | undefined {
+  if (input == null) {
+    return input;
+  }
+  // '' or []
+  if (
+    input.length === 0 &&
+    (!allowEmptyString || (allowEmptyString && input !== ''))
+  ) {
+    return null;
+  }
+
+  const str = input instanceof Array ? input[0] : input;
+  if (str == null) {
+    return str;
+  }
+  if (!allowEmptyString && str === '') {
+    return null;
+  }
+
+  return str;
+}
+
+/**
+ * Interprets an encoded string and return null/undefined or an array with
+ * the encoded string contents
+ * @param input encoded string
+ */
+function getEncodedValueArray(
+  input: string | (string | null)[] | null | undefined
+): (string | null)[] | null | undefined {
+  if (input == null) {
+    return input;
+  }
+
+  return input instanceof Array ? input : input === '' ? [] : [input];
+}
+
+/**
  * Encodes a date as a string in YYYY-MM-DD format.
  *
  * @param {Date} date
  * @return {String} the encoded date
  */
-export function encodeDate(date: Date | null | undefined): string | undefined {
+export function encodeDate(
+  date: Date | null | undefined
+): string | null | undefined {
   if (date == null) {
-    return undefined;
+    return date;
   }
 
   const year = date.getFullYear();
@@ -30,16 +78,10 @@ export function encodeDate(date: Date | null | undefined): string | undefined {
  * @return {Date} parsed date
  */
 export function decodeDate(
-  input: string | string[] | null | undefined
-): Date | undefined {
-  if (input == null || !input.length) {
-    return undefined;
-  }
-
-  const dateString = input instanceof Array ? input[0] : input;
-  if (dateString == null || !dateString.length) {
-    return undefined;
-  }
+  input: string | (string | null)[] | null | undefined
+): Date | null | undefined {
+  const dateString = getEncodedValue(input);
+  if (dateString == null) return dateString;
 
   const parts = dateString.split('-') as any;
   // may only be a year so won't even have a month
@@ -54,7 +96,7 @@ export function decodeDate(
   const decoded = new Date(...(parts as [number, number, number]));
 
   if (isNaN(decoded.getTime())) {
-    return undefined;
+    return null;
   }
 
   return decoded;
@@ -68,9 +110,9 @@ export function decodeDate(
  */
 export function encodeDateTime(
   date: Date | null | undefined
-): string | undefined {
+): string | null | undefined {
   if (date == null) {
-    return undefined;
+    return date;
   }
 
   return date.toISOString();
@@ -88,21 +130,15 @@ export function encodeDateTime(
  * @return {Date} parsed date
  */
 export function decodeDateTime(
-  input: string | string[] | null | undefined
-): Date | undefined {
-  if (input == null || !input.length) {
-    return undefined;
-  }
-
-  const dateString = input instanceof Array ? input[0] : input;
-  if (dateString == null || !dateString.length) {
-    return undefined;
-  }
+  input: string | (string | null)[] | null | undefined
+): Date | null | undefined {
+  const dateString = getEncodedValue(input);
+  if (dateString == null) return dateString;
 
   const decoded = new Date(dateString);
 
   if (isNaN(decoded.getTime())) {
-    return undefined;
+    return null;
   }
 
   return decoded;
@@ -116,9 +152,9 @@ export function decodeDateTime(
  */
 export function encodeBoolean(
   bool: boolean | null | undefined
-): string | undefined {
-  if (bool === undefined) {
-    return undefined;
+): string | null | undefined {
+  if (bool == null) {
+    return bool;
   }
 
   return bool ? '1' : '0';
@@ -134,13 +170,10 @@ export function encodeBoolean(
  * @return {Boolean} the boolean value
  */
 export function decodeBoolean(
-  input: string | string[] | null | undefined
-): boolean | undefined {
-  if (input == null) {
-    return undefined;
-  }
-
-  const boolStr = input instanceof Array ? input[0] : input;
+  input: string | (string | null)[] | null | undefined
+): boolean | null | undefined {
+  const boolStr = getEncodedValue(input);
+  if (boolStr == null) return boolStr;
 
   if (boolStr === '1') {
     return true;
@@ -148,7 +181,7 @@ export function decodeBoolean(
     return false;
   }
 
-  return undefined;
+  return null;
 }
 
 /**
@@ -159,9 +192,9 @@ export function decodeBoolean(
  */
 export function encodeNumber(
   num: number | null | undefined
-): string | undefined {
+): string | null | undefined {
   if (num == null) {
-    return undefined;
+    return num;
   }
 
   return String(num);
@@ -177,24 +210,13 @@ export function encodeNumber(
  * @return {Number} the number value
  */
 export function decodeNumber(
-  input: string | string[] | null | undefined
-): number | undefined {
-  if (input == null) {
-    return undefined;
-  }
-
-  const numStr = input instanceof Array ? input[0] : input;
-
-  if (numStr == null || numStr === '') {
-    return undefined;
-  }
+  input: string | (string | null)[] | null | undefined
+): number | null | undefined {
+  const numStr = getEncodedValue(input);
+  if (numStr == null) return numStr;
+  if (numStr === '') return null;
 
   const result = +numStr;
-
-  if (isNaN(result)) {
-    return undefined;
-  }
-
   return result;
 }
 
@@ -206,9 +228,9 @@ export function decodeNumber(
  */
 export function encodeString(
   str: string | string[] | null | undefined
-): string | undefined {
+): string | null | undefined {
   if (str == null) {
-    return undefined;
+    return str;
   }
 
   return String(str);
@@ -223,17 +245,10 @@ export function encodeString(
  * @return {String} the string value
  */
 export function decodeString(
-  input: string | string[] | null | undefined
-): string | undefined {
-  if (input == null) {
-    return undefined;
-  }
-
-  const str = input instanceof Array ? input[0] : input;
-
-  if (str == null) {
-    return undefined;
-  }
+  input: string | (string | null)[] | null | undefined
+): string | null | undefined {
+  const str = getEncodedValue(input, true);
+  if (str == null) return str;
 
   return String(str);
 }
@@ -244,9 +259,11 @@ export function decodeString(
  * @param {Any} any The thing to be encoded
  * @return {String} The JSON string representation of any
  */
-export function encodeJson(any: any | null | undefined): string | undefined {
+export function encodeJson(
+  any: any | null | undefined
+): string | null | undefined {
   if (any == null) {
-    return undefined;
+    return any;
   }
 
   return JSON.stringify(any);
@@ -261,19 +278,12 @@ export function encodeJson(any: any | null | undefined): string | undefined {
  * @return {Any} The javascript representation
  */
 export function decodeJson(
-  input: string | string[] | null | undefined
-): any | undefined {
-  if (input == null) {
-    return undefined;
-  }
+  input: string | (string | null)[] | null | undefined
+): any | null | undefined {
+  const jsonStr = getEncodedValue(input);
+  if (jsonStr == null) return jsonStr;
 
-  const jsonStr = input instanceof Array ? input[0] : input;
-
-  if (!jsonStr) {
-    return undefined;
-  }
-
-  let result;
+  let result = null;
   try {
     result = JSON.parse(jsonStr);
   } catch (e) {
@@ -291,10 +301,10 @@ export function decodeJson(
  * as repeated query parameters
  */
 export function encodeArray(
-  array: string[] | null | undefined
-): string[] | undefined {
-  if (!array) {
-    return undefined;
+  array: (string | null)[] | null | undefined
+): (string | null)[] | null | undefined {
+  if (array == null) {
+    return array;
   }
 
   return array;
@@ -308,19 +318,12 @@ export function encodeArray(
  * @return {Array} The javascript representation
  */
 export function decodeArray(
-  input: string | string[] | null | undefined
-): string[] | undefined {
-  if (!input) {
-    return undefined;
-  }
+  input: string | (string | null)[] | null | undefined
+): (string | null)[] | null | undefined {
+  const arr = getEncodedValueArray(input);
+  if (arr == null) return arr;
 
-  if (!(input instanceof Array)) {
-    return [input];
-  }
-
-  return input
-    .map(item => (item === '' ? undefined : item))
-    .filter(item => item !== undefined) as string[];
+  return arr;
 }
 
 /**
@@ -331,13 +334,13 @@ export function decodeArray(
  * as repeated query parameters
  */
 export function encodeNumericArray(
-  array: number[] | null | undefined
-): string[] | undefined {
-  if (!array) {
-    return undefined;
+  array: (number | null)[] | null | undefined
+): (string | null)[] | null | undefined {
+  if (array == null) {
+    return array;
   }
 
-  return array.map(d => `${d}`);
+  return array.map(String);
 }
 
 /**
@@ -348,17 +351,12 @@ export function encodeNumericArray(
  * @return {Array} The javascript representation
  */
 export function decodeNumericArray(
-  input: string | string[] | null | undefined
-): number[] | undefined {
+  input: string | (string | null)[] | null | undefined
+): (number | null)[] | null | undefined {
   const arr = decodeArray(input);
+  if (arr == null) return arr;
 
-  if (!arr) {
-    return undefined;
-  }
-
-  return arr
-    .map(item => +item)
-    .filter(item => item !== undefined && !isNaN(item)) as number[];
+  return arr.map((d) => (d === '' || d == null ? null : +d));
 }
 
 /**
@@ -371,11 +369,11 @@ export function decodeNumericArray(
  * entry separator
  */
 export function encodeDelimitedArray(
-  array: string[] | null | undefined,
+  array: (string | null)[] | null | undefined,
   entrySeparator = '_'
-): string | undefined {
-  if (!array) {
-    return undefined;
+): string | null | undefined {
+  if (array == null) {
+    return array;
   }
 
   return array.join(entrySeparator);
@@ -393,23 +391,14 @@ export function encodeDelimitedArray(
  * @return {Array} The javascript representation
  */
 export function decodeDelimitedArray(
-  input: string | string[] | null | undefined,
+  input: string | (string | null)[] | null | undefined,
   entrySeparator = '_'
-): string[] | undefined {
-  if (input == null) {
-    return undefined;
-  }
+): (string | null)[] | null | undefined {
+  const arrayStr = getEncodedValue(input, true);
+  if (arrayStr == null) return arrayStr;
+  if (arrayStr === '') return [];
 
-  const arrayStr = input instanceof Array ? input[0] : input;
-
-  if (!arrayStr) {
-    return undefined;
-  }
-
-  return arrayStr
-    .split(entrySeparator)
-    .map(item => (item === '' ? undefined : item))
-    .filter(item => item !== undefined) as string[];
+  return arrayStr.split(entrySeparator);
 }
 
 /**
@@ -420,9 +409,9 @@ export function decodeDelimitedArray(
  * @return {String} The JSON string representation of array
  */
 export const encodeDelimitedNumericArray = encodeDelimitedArray as (
-  array: number[] | null | undefined,
+  array: (number | null)[] | null | undefined,
   entrySeparator?: string
-) => string | undefined;
+) => string | null | undefined;
 
 /**
  * Decodes a delimited string into javascript array where all entries are numbers
@@ -434,18 +423,13 @@ export const encodeDelimitedNumericArray = encodeDelimitedArray as (
  * @return {Array} The javascript representation
  */
 export function decodeDelimitedNumericArray(
-  arrayStr: string | string[] | null | undefined,
+  arrayStr: string | (string | null)[] | null | undefined,
   entrySeparator = '_'
-): number[] | undefined {
+): (number | null)[] | null | undefined {
   const decoded = decodeDelimitedArray(arrayStr, entrySeparator);
+  if (decoded == null) return decoded;
 
-  if (!decoded) {
-    return undefined;
-  }
-
-  return decoded
-    .map(d => (d == null ? undefined : +d))
-    .filter(d => d !== undefined && !isNaN(d)) as number[];
+  return decoded.map((d) => (d === '' || d == null ? null : +d));
 }
 
 /**
@@ -460,16 +444,15 @@ export function decodeDelimitedNumericArray(
  * @return {String} The encoded object
  */
 export function encodeObject(
-  obj: { [key: string]: string | number | undefined } | null | undefined,
+  obj: { [key: string]: string | null | number | undefined } | null | undefined,
   keyValSeparator = '-',
   entrySeparator = '_'
-): string | undefined {
-  if (!obj || !Object.keys(obj).length) {
-    return undefined;
-  }
+): string | null | undefined {
+  if (obj == null) return obj; // null or undefined
+  if (!Object.keys(obj).length) return ''; // {} case
 
   return Object.keys(obj)
-    .map(key => `${key}${keyValSeparator}${obj[key]}`)
+    .map((key) => `${key}${keyValSeparator}${obj[key]}`)
     .join(entrySeparator);
 }
 
@@ -487,24 +470,18 @@ export function encodeObject(
  * @return {Object} The javascript object
  */
 export function decodeObject(
-  input: string | string[] | null | undefined,
+  input: string | (string | null)[] | null | undefined,
   keyValSeparator = '-',
   entrySeparator = '_'
-): { [key: string]: string } | undefined {
-  if (input == null) {
-    return undefined;
-  }
-
-  const objStr = input instanceof Array ? input[0] : input;
-
-  if (!objStr || !objStr.length) {
-    return undefined;
-  }
+): { [key: string]: string } | null | undefined {
+  const objStr = getEncodedValue(input, true);
+  if (objStr == null) return objStr;
+  if (objStr === '') return {};
 
   const obj: { [key: string]: string } = {};
 
   const keyValSeparatorRegExp = new RegExp(`${keyValSeparator}(.*)`);
-  objStr.split(entrySeparator).forEach(entryStr => {
+  objStr.split(entrySeparator).forEach((entryStr) => {
     const [key, value] = entryStr.split(keyValSeparatorRegExp);
     obj[key] = value;
   });
@@ -523,10 +500,10 @@ export function decodeObject(
  * @return {String} The encoded object
  */
 export const encodeNumericObject = encodeObject as (
-  obj: { [key: string]: number | undefined } | null | undefined,
+  obj: { [key: string]: number | null | undefined } | null | undefined,
   keyValSeparator?: string,
   entrySeparator?: string
-) => string | undefined;
+) => string | null | undefined;
 
 /**
  * Decodes a simple object to javascript where all values are numbers.
@@ -542,29 +519,23 @@ export const encodeNumericObject = encodeObject as (
  * @return {Object} The javascript object
  */
 export function decodeNumericObject(
-  input: string | string[] | null | undefined,
+  input: string | (string | null)[] | null | undefined,
   keyValSeparator = '-',
   entrySeparator = '_'
-): { [key: string]: number | undefined } | undefined {
-  const decoded:
-    | { [key: string]: number | string | undefined }
-    | undefined = decodeObject(input, keyValSeparator, entrySeparator);
+): { [key: string]: number | null | undefined } | null | undefined {
+  const decoded: { [key: string]: string } | null | undefined = decodeObject(
+    input,
+    keyValSeparator,
+    entrySeparator
+  );
 
-  //console.log("input:", input);
-  //console.log("decoded:", decoded);
-
-  if (!decoded) {
-    return undefined;
-  }
-
-  //console.log("x");
+  if (decoded == null) return decoded;
 
   // convert to numbers
-  Object.keys(decoded).forEach(key => {
-    if (decoded[key] !== undefined) {
-      decoded[key] = decodeNumber(decoded[key] as string);
-    }
-  });
+  const decodedNumberObj: { [key: string]: number | null | undefined } = {};
+  for (const key of Object.keys(decoded)) {
+    decodedNumberObj[key] = decodeNumber(decoded[key]);
+  }
 
-  return decoded as { [key: string]: number | undefined };
+  return decodedNumberObj;
 }
