@@ -1,4 +1,4 @@
-import { stringify, parse as parseQueryString } from 'query-string';
+import { stringify, parse as parseQueryString, parseUrl } from 'query-string';
 import { EncodedQuery, EncodedQueryWithNulls } from './types';
 
 /**
@@ -32,13 +32,17 @@ export function updateLocation(
   location: Location
 ): Location {
   const encodedSearchString = stringify(filterNully(encodedQuery));
+  const search = encodedSearchString.length ? `?${encodedSearchString}` : '';
+  const href = parseUrl(location.href).url + search;
+
   const newLocation: Location & {
     key: string;
     query: EncodedQueryWithNulls;
   } = {
     ...location,
     key: `${Date.now()}`, // needed for some routers (e.g. react-router)
-    search: encodedSearchString.length ? `?${encodedSearchString}` : '',
+    href,
+    search,
     query: encodedQuery, // needed for some routers (e.g. found)
   };
 
