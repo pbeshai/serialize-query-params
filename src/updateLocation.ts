@@ -3,6 +3,7 @@ import { EncodedQuery, EncodedQueryWithNulls } from './types';
 
 /**
  * Update a location, wiping out parameters not included in encodedQuery
+ * If a param is set to undefined it will be removed from the URL.
  */
 export function updateLocation(
   encodedQuery: EncodedQueryWithNulls,
@@ -27,7 +28,8 @@ export function updateLocation(
 }
 
 /**
- * Update a location while retaining existing parameters
+ * Update a location while retaining existing parameters.
+ * If a param is set to undefined it will be removed from the URL.
  */
 export function updateInLocation(
   encodedQueryReplacements: EncodedQueryWithNulls,
