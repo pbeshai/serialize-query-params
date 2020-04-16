@@ -16,7 +16,7 @@ export function decodeQueryParams<QPCMap extends QueryParamConfigMap>(
   const paramNames = Object.keys(encodedQuery);
   for (const paramName of paramNames) {
     const encodedValue = encodedQuery[paramName];
-    if (encodedValue == null) {
+    if (encodedValue === undefined) {
       decodedQuery[paramName as keyof QPCMap] = undefined;
       continue;
     }
@@ -34,7 +34,7 @@ export function decodeQueryParams<QPCMap extends QueryParamConfigMap>(
     } else {
       decodedQuery[paramName as keyof QPCMap] = paramConfigMap[
         paramName
-      ].decode(encodedValue as string | string[]);
+      ].decode(encodedValue as string | (string | null)[] | null);
     }
   }
 

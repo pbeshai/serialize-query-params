@@ -49,26 +49,32 @@ describe('encodeQueryParams', () => {
     const encodedQuery = encodeQueryParams(
       {
         foo: StringParam,
+        emp: StringParam,
+        nul: StringParam,
         bar: NumberParam,
       },
-      { bar: 555 }
+      { bar: 555, emp: '', nul: null }
     );
     expect(encodedQuery).toEqual({
       bar: '555',
+      emp: '',
+      nul: null,
     });
   });
 
-  it('returns nully values as undefined', () => {
+  it('handles nully and empty values', () => {
     const encodedQuery = encodeQueryParams(
       {
-        foo: StringParam,
+        emp: StringParam,
+        nul: StringParam,
         bar: NumberParam,
       },
-      { bar: null, foo: undefined }
+      { bar: undefined, emp: '', nul: null }
     );
     expect(encodedQuery).toEqual({
       bar: undefined,
-      foo: undefined,
+      emp: '',
+      nul: null,
     });
   });
 });
