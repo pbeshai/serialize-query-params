@@ -24,7 +24,7 @@ export interface QueryParamConfig<D, D2 = D> {
   encode: (value: D) => string | (string | null)[] | null | undefined;
 
   /** Convert the query param string value to its native type */
-  decode: (value: string | (string | null)[] | null) => D2;
+  decode: (value: string | (string | null)[] | null | undefined) => D2;
 }
 
 /**

@@ -68,6 +68,20 @@ Examples in this table assume query parameter named `qp`.
 | DelimitedArrayParam | string[] | `['a','b','c']` | `?qp=a_b_c'` |
 | DelimitedNumericArrayParam | number[] | `[1, 2, 3]` | `?qp=1_2_3'` |
 
+**Setting a default value**
+
+If you'd like to have a default value, you can wrap your param with `withDefault()`:
+
+```js
+import { withDefault, ArrayParam } from 'serialize-query-params';
+
+// by default, nulls are converted to defaults
+const NeverNullArrayParam = withDefault(ArrayParam, []);
+
+// if you don't want nulls to be included, pass false as a third arg
+const NeverUndefinedArrayParam = withDefault(ArrayParam, [], false);
+```
+
 **Example with Custom Param**
 
 You can define your own params if the ones shipped with this package don't work for you. There are included [serialization utility functions](https://github.com/pbeshai/serialize-query-params/blob/master/src/serialize.ts) to make this easier, but you can use whatever you like.

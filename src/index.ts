@@ -1,3 +1,5 @@
+export { withDefault } from './withDefault';
+
 export {
   encodeDate,
   decodeDate,
