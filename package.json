@@ -46,10 +46,11 @@
     "@types/node": "12.7.4",
     "babel-jest": "^25.3.0",
     "jest": "^25.3.0",
+    "query-string": "^6.12.1",
     "rimraf": "^3.0.2",
     "typescript": "^3.8.3"
   },
-  "dependencies": {
-    "query-string": "5.1.1"
+  "peerDependencies": {
+    "query-string": "^5.1.1 || ^6"
   }
 }
