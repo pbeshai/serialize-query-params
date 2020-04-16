@@ -9,6 +9,7 @@ describe('updateLocation', () => {
     expect(newLocation.search).toBe('?foo=xxx');
     expect(newLocation.key).toBeDefined();
     expect(newLocation.key).not.toBe((location as any).key);
+    expect(newLocation.href).toBe('http://localhost:3000/?foo=xxx');
 
     // check multiple params
     expect(
@@ -21,6 +22,7 @@ describe('updateLocation', () => {
     const location = makeMockLocation({ foo: 'abc', bar: '555' });
     const newLocation = updateLocation({}, location);
     expect(newLocation.search).toBe('');
+    expect(newLocation.href).toBe('http://localhost:3000/');
 
     // check updating from no params
     expect(updateLocation({ foo: 'xxx' }, makeMockLocation({})).search).toBe(
