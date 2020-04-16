@@ -11,7 +11,7 @@ export function updateLocation(
 ): Location {
   const encodedSearchString = stringify(encodedQuery);
   const search = encodedSearchString.length ? `?${encodedSearchString}` : '';
-  const href = parseUrl(location.href).url + search;
+  const href = parseUrl(location.href || '').url + search;
 
   const newLocation: Location & {
     key: string;
