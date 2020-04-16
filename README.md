@@ -36,7 +36,8 @@ $ npm install --save serialize-query-params
 - [Type Definitions](https://github.com/pbeshai/serialize-query-params/blob/master/src/types.ts)
 - [Serialization Utility Functions](https://github.com/pbeshai/serialize-query-params/blob/master/src/serialize.ts)
 
-For convenience, serialize-query-params exports `parse`, `stringify`, `extract`, and `parseUrl` functions from the [query-string](https://github.com/sindresorhus/query-string) library.
+There is a peer dependency on [query-string](https://github.com/sindresorhus/query-string). For IE11 support, use v5.1.1, otherwise use v6.
+
 
 
 #### Param Types
