@@ -6,7 +6,7 @@ import { QueryParamConfig } from './types';
  */
 export const StringParam: QueryParamConfig<
   string | null | undefined,
-  string | undefined
+  string | null | undefined
 > = {
   encode: Serialize.encodeString,
   decode: Serialize.decodeString,
@@ -17,7 +17,7 @@ export const StringParam: QueryParamConfig<
  */
 export const NumberParam: QueryParamConfig<
   number | null | undefined,
-  number | undefined
+  number | null | undefined
 > = {
   encode: Serialize.encodeNumber,
   decode: Serialize.decodeNumber,
@@ -32,7 +32,7 @@ export const ObjectParam: QueryParamConfig<
     }
   | null
   | undefined,
-  { [key: string]: string | undefined } | undefined
+  { [key: string]: string | undefined } | null | undefined
 > = {
   encode: Serialize.encodeObject,
   decode: Serialize.decodeObject,
@@ -42,8 +42,8 @@ export const ObjectParam: QueryParamConfig<
  * For flat arrays of strings, filters out undefined values during decode
  */
 export const ArrayParam: QueryParamConfig<
-  string[] | null | undefined,
-  string[] | undefined
+  (string | null)[] | null | undefined,
+  (string | null)[] | null | undefined
 > = {
   encode: Serialize.encodeArray,
   decode: Serialize.decodeArray,
@@ -53,8 +53,8 @@ export const ArrayParam: QueryParamConfig<
  * For flat arrays of strings, filters out undefined values during decode
  */
 export const NumericArrayParam: QueryParamConfig<
-  number[] | null | undefined,
-  number[] | undefined
+  (number | null)[] | null | undefined,
+  (number | null)[] | null | undefined
 > = {
   encode: Serialize.encodeNumericArray,
   decode: Serialize.decodeNumericArray,
@@ -73,7 +73,7 @@ export const JsonParam: QueryParamConfig<any, any> = {
  */
 export const DateParam: QueryParamConfig<
   Date | null | undefined,
-  Date | undefined
+  Date | null | undefined
 > = {
   encode: Serialize.encodeDate,
   decode: Serialize.decodeDate,
@@ -83,9 +83,9 @@ export const DateParam: QueryParamConfig<
  * For dates in simplified extended ISO format (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ)
  */
 export const DateTimeParam: QueryParamConfig<
-    Date | null | undefined,
-    Date | undefined
-    > = {
+  Date | null | undefined,
+  Date | null | undefined
+> = {
   encode: Serialize.encodeDateTime,
   decode: Serialize.decodeDateTime,
 };
@@ -95,7 +95,7 @@ export const DateTimeParam: QueryParamConfig<
  */
 export const BooleanParam: QueryParamConfig<
   boolean | null | undefined,
-  boolean | undefined
+  boolean | null | undefined
 > = {
   encode: Serialize.encodeBoolean,
   decode: Serialize.decodeBoolean,
@@ -106,11 +106,11 @@ export const BooleanParam: QueryParamConfig<
  */
 export const NumericObjectParam: QueryParamConfig<
   | {
-      [key: string]: number | undefined;
+      [key: string]: number | null | undefined;
     }
   | null
   | undefined,
-  { [key: string]: number | undefined } | undefined
+  { [key: string]: number | null | undefined } | null | undefined
 > = {
   encode: Serialize.encodeNumericObject,
   decode: Serialize.decodeNumericObject,
@@ -120,8 +120,8 @@ export const NumericObjectParam: QueryParamConfig<
  * For flat arrays of strings, filters out undefined values during decode
  */
 export const DelimitedArrayParam: QueryParamConfig<
-  string[] | null | undefined,
-  string[] | undefined
+  (string | null)[] | null | undefined,
+  (string | null)[] | null | undefined
 > = {
   encode: Serialize.encodeDelimitedArray,
   decode: Serialize.decodeDelimitedArray,
@@ -131,8 +131,8 @@ export const DelimitedArrayParam: QueryParamConfig<
  * For flat arrays where the values are numbers, filters out undefined values during decode
  */
 export const DelimitedNumericArrayParam: QueryParamConfig<
-  number[] | null | undefined,
-  number[] | undefined
+  (number | null)[] | null | undefined,
+  (number | null)[] | null | undefined
 > = {
   encode: Serialize.encodeDelimitedNumericArray,
   decode: Serialize.decodeDelimitedNumericArray,

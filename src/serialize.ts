@@ -227,7 +227,7 @@ export function decodeNumber(
  * @return {String} the encoded string
  */
 export function encodeString(
-  str: string | string[] | null | undefined
+  str: string | (string | null)[] | null | undefined
 ): string | null | undefined {
   if (str == null) {
     return str;

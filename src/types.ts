@@ -21,7 +21,7 @@ export interface EncodedQueryWithNulls {
  */
 export interface QueryParamConfig<D, D2 = D> {
   /** Convert the query param value to a string */
-  encode: (value: D) => string | (string | null)[] | undefined;
+  encode: (value: D) => string | (string | null)[] | null | undefined;
 
   /** Convert the query param string value to its native type */
   decode: (value: string | (string | null)[] | null) => D2;
