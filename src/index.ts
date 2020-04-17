@@ -48,6 +48,11 @@ export {
   EncodedValueMap,
 } from './types';
 
-export { updateLocation, updateInLocation } from './updateLocation';
+export {
+  updateLocation,
+  updateInLocation,
+  ExtendedStringifyOptions,
+  transformSearchStringJsonSafe,
+} from './updateLocation';
 export { encodeQueryParams } from './encodeQueryParams';
 export { decodeQueryParams } from './decodeQueryParams';

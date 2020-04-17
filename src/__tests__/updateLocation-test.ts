@@ -48,6 +48,31 @@ describe('updateLocation', () => {
       '?foo=xxx'
     );
   });
+
+  it('handles stringify options', () => {
+    const location = makeMockLocation({
+      foo: 'one two',
+      bar: '[({1,2:3:4,5})]',
+    });
+    const newLocation = updateLocation(
+      { foo: 'o t h', bar: '[({1,2:3:6,5})]' },
+      location,
+      {
+        encode: false,
+      }
+    );
+    expect(newLocation.search).toBe('?bar=[({1,2:3:6,5})]&foo=o t h');
+
+    const newLocation2 = updateLocation(
+      { foo: 'o t h', bar: '[({1,2:6:4,5})]' },
+      location,
+      {
+        encode: false,
+        transformSearchString: (str) => str.replace(/ /g, '%20'),
+      }
+    );
+    expect(newLocation2.search).toBe('?bar=[({1,2:6:4,5})]&foo=o%20t%20h');
+  });
 });
 
 describe('updateInLocation', () => {
@@ -81,5 +106,22 @@ describe('updateInLocation', () => {
     expect(updateInLocation({ foo: 'xxx' }, makeMockLocation({})).search).toBe(
       '?foo=xxx'
     );
+  });
+
+  it('handles stringify options', () => {
+    const location = makeMockLocation({
+      foo: 'one two',
+      bar: '[({1,2:3:4,5})]',
+    });
+    const newLocation = updateInLocation({ foo: 'o t h' }, location, {
+      encode: false,
+    });
+    expect(newLocation.search).toBe('?bar=[({1,2:3:4,5})]&foo=o t h');
+
+    const newLocation2 = updateInLocation({ foo: 'o t h' }, location, {
+      encode: false,
+      transformSearchString: (str) => str.replace(/ /g, '%20'),
+    });
+    expect(newLocation2.search).toBe('?bar=[({1,2:3:4,5})]&foo=o%20t%20h');
   });
 });
