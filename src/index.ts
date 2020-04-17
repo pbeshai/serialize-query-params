@@ -42,7 +42,6 @@ export {
 
 export {
   EncodedQuery,
-  EncodedQueryWithNulls,
   QueryParamConfig,
   QueryParamConfigMap,
   DecodedValueMap,

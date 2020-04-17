@@ -176,7 +176,7 @@ const link = `/?${stringify(encodedQuery)}`;
 
 ```js
 export function updateLocation(
-  encodedQuery: EncodedQueryWithNulls,
+  encodedQuery: EncodedQuery,
   location: Location
 ): Location {
 ```
@@ -204,7 +204,7 @@ const newLocation = updateLocation({ foo: '555' }, location);
 
 ```js
 export function updateInLocation(
-  encodedQueryReplacements: EncodedQueryWithNulls,
+  encodedQueryReplacements: EncodedQuery,
   location: Location
 ): Location {
 ```

@@ -1,12 +1,12 @@
 import { stringify, parse as parseQueryString, parseUrl } from 'query-string';
-import { EncodedQuery, EncodedQueryWithNulls } from './types';
+import { EncodedQuery } from './types';
 
 /**
  * Update a location, wiping out parameters not included in encodedQuery
  * If a param is set to undefined it will be removed from the URL.
  */
 export function updateLocation(
-  encodedQuery: EncodedQueryWithNulls,
+  encodedQuery: EncodedQuery,
   location: Location
 ): Location {
   const encodedSearchString = stringify(encodedQuery);
@@ -15,7 +15,7 @@ export function updateLocation(
 
   const newLocation: Location & {
     key: string;
-    query: EncodedQueryWithNulls;
+    query: EncodedQuery;
   } = {
     ...location,
     key: `${Date.now()}`, // needed for some routers (e.g. react-router)
@@ -32,7 +32,7 @@ export function updateLocation(
  * If a param is set to undefined it will be removed from the URL.
  */
 export function updateInLocation(
-  encodedQueryReplacements: EncodedQueryWithNulls,
+  encodedQueryReplacements: EncodedQuery,
   location: Location
 ): Location {
   // if a query is there, use it, otherwise parse the search string

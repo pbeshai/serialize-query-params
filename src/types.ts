@@ -1,16 +1,10 @@
 /**
- * Encoded query parameters (all strings)
- */
-export interface EncodedQuery {
-  [key: string]: string | (string | null)[];
-}
-
-/**
  * Encoded query parameters, possibly including null or undefined values
  */
-export interface EncodedQueryWithNulls {
+export interface EncodedQuery {
   [key: string]: string | (string | null)[] | null | undefined;
 }
+
 /**
  * Configuration for a query param specifying how to encode it
  * (convert it to a string) and decode it (convert it from a string
