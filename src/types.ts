@@ -19,6 +19,9 @@ export interface QueryParamConfig<D, D2 = D> {
 
   /** Convert the query param string value to its native type */
   decode: (value: string | (string | null)[] | null | undefined) => D2;
+
+  /** Checks if two values are equal (otherwise typically shallowEqual will be used) */
+  equals?: (valueA: D | D2, valueB: D | D2) => boolean;
 }
 
 /**

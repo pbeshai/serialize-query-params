@@ -27,11 +27,7 @@ export const NumberParam: QueryParamConfig<
  * For flat objects where values are strings
  */
 export const ObjectParam: QueryParamConfig<
-  | {
-      [key: string]: string | undefined;
-    }
-  | null
-  | undefined,
+  { [key: string]: string | undefined } | null | undefined,
   { [key: string]: string | undefined } | null | undefined
 > = {
   encode: Serialize.encodeObject,
@@ -77,6 +73,20 @@ export const DateParam: QueryParamConfig<
 > = {
   encode: Serialize.encodeDate,
   decode: Serialize.decodeDate,
+  equals: (
+    valueA: Date | null | undefined,
+    valueB: Date | null | undefined
+  ) => {
+    if (valueA === valueB) return true;
+    if (valueA == null || valueB == null) return valueA === valueB;
+
+    // ignore time of day
+    return (
+      valueA.getFullYear() === valueB.getFullYear() &&
+      valueA.getMonth() === valueB.getMonth() &&
+      valueA.getDate() === valueB.getDate()
+    );
+  },
 };
 
 /**
@@ -88,6 +98,15 @@ export const DateTimeParam: QueryParamConfig<
 > = {
   encode: Serialize.encodeDateTime,
   decode: Serialize.decodeDateTime,
+  equals: (
+    valueA: Date | null | undefined,
+    valueB: Date | null | undefined
+  ) => {
+    if (valueA === valueB) return true;
+    if (valueA == null || valueB == null) return valueA === valueB;
+
+    return valueA.valueOf() === valueB.valueOf();
+  },
 };
 
 /**
@@ -105,11 +124,7 @@ export const BooleanParam: QueryParamConfig<
  * For flat objects where the values are numbers
  */
 export const NumericObjectParam: QueryParamConfig<
-  | {
-      [key: string]: number | null | undefined;
-    }
-  | null
-  | undefined,
+  { [key: string]: number | null | undefined } | null | undefined,
   { [key: string]: number | null | undefined } | null | undefined
 > = {
   encode: Serialize.encodeNumericObject,
