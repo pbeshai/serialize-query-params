@@ -39,6 +39,6 @@ export function withDefault<D, DefaultType extends D2, D2 = D>(
 
     return decodedValue as Exclude<D2, undefined | null>;
   };
-  return { encode: param.encode, decode: decodeWithDefault };
+  return { ...param, decode: decodeWithDefault };
 }
 export default withDefault;
