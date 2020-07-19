@@ -123,6 +123,7 @@ import {
   stringify,
   decodeQueryParams,
   NumberParam,
+  DelimitedArrayParam
 } from 'serialize-query-params';
 
 // encode each parameter according to the configuration
@@ -153,10 +154,11 @@ query parameters.
 
 ```js
 import {
-  stringify,
   encodeQueryParams,
+  DelimitedArrayParam,
   NumberParam,
 } from 'serialize-query-params';
+import { stringify } from 'query-string';
 
 // encode each parameter according to the configuration
 const encodedQuery = encodeQueryParams(
