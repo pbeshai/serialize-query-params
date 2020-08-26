@@ -1,10 +1,12 @@
 import { decodeQueryParams } from '../index';
+
 import {
   NumberParam,
   ArrayParam,
   StringParam,
   DelimitedArrayParam,
 } from '../params';
+import withDefault from '../withDefault';
 
 describe('decodeQueryParams', () => {
   it('works', () => {
@@ -14,6 +16,7 @@ describe('decodeQueryParams', () => {
         bar: NumberParam,
         baz: ArrayParam,
         box: DelimitedArrayParam,
+        not: withDefault(NumberParam, 94),
       },
       {
         foo: '123',
@@ -27,6 +30,7 @@ describe('decodeQueryParams', () => {
       bar: 555,
       baz: ['a', 'b', 'c'],
       box: ['a', 'b', 'c'],
+      not: 94,
     });
   });
 
