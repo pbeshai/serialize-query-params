@@ -13,7 +13,16 @@ export function decodeQueryParams<QPCMap extends QueryParamConfigMap>(
 ): Partial<DecodedValueMap<QPCMap>> {
   const decodedQuery: Partial<DecodedValueMap<QPCMap>> = {};
 
-  const paramNames = Object.keys(encodedQuery);
+  // iterate over all keys in the config (#30)
+  const paramNames = Object.keys(paramConfigMap);
+
+  // ensure any non configured keys that are in the URL are also included
+  for (const encodedKey of Object.keys(encodedQuery)) {
+    if (paramConfigMap[encodedKey] == null) {
+      paramNames.push(encodedKey);
+    }
+  }
+
   for (const paramName of paramNames) {
     const encodedValue = encodedQuery[paramName];
 
