@@ -57,7 +57,7 @@ export {
 export { encodeQueryParams } from './encodeQueryParams';
 export { decodeQueryParams } from './decodeQueryParams';
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && typeof require === 'function') {
   /*
    * run checks to ensure a valid version of query-string is installed
    * see https://github.com/pbeshai/use-query-params/issues/127 for discussion
