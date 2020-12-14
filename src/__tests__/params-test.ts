@@ -11,6 +11,7 @@ import {
   NumericObjectParam,
   DelimitedArrayParam,
   DelimitedNumericArrayParam,
+  createEnumParam,
 } from '../index';
 
 describe('params', () => {
@@ -109,6 +110,12 @@ describe('params', () => {
     it('DelimitedNumericArrayParam', () => {
       expect(DelimitedNumericArrayParam.encode([1, 2])).toBe('1_2');
       expect(DelimitedNumericArrayParam.decode('1_2')).toEqual([1, 2]);
+    });
+    it('createEnumParam', () => {
+      const TestEnumParam = createEnumParam(['foo', 'bar'])
+      expect(TestEnumParam.encode('foo')).toBe('foo');
+      expect(TestEnumParam.decode('bar')).toBe('bar');
+      expect(TestEnumParam.decode('baz')).toBeUndefined();
     });
   });
 });

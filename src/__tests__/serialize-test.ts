@@ -7,6 +7,7 @@ import {
   decodeNumber,
   encodeString,
   decodeString,
+  decodeEnum,
   encodeJson,
   decodeJson,
   encodeArray,
@@ -146,6 +147,24 @@ describe('serialize', () => {
       expect(decodeString(['foo', 'bar'])).toBe('foo');
     });
   });
+
+  describe('decodeEnum', () => {
+    const enumValues = ['foo', 'bar']
+
+    it('produces the correct value', () => {
+      expect(decodeEnum('foo', enumValues)).toBe('foo');
+      expect(decodeEnum('bar', enumValues)).toBe('bar');
+      expect(decodeEnum('baz', enumValues)).toBeUndefined();
+      expect(decodeEnum('', enumValues)).toBeUndefined();
+      expect(decodeEnum(undefined, enumValues)).toBeUndefined();
+      expect(decodeEnum(null, enumValues)).toBeNull();
+    });
+
+    it('handles array of values', () => {
+      expect(decodeEnum(['foo', 'bar'], enumValues)).toBe('foo');
+    });
+  })
+
   describe('encodeJson', () => {
     it('produces the correct value', () => {
       const input = { test: '123', foo: [1, 2, 3] };

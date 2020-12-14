@@ -13,6 +13,16 @@ export const StringParam: QueryParamConfig<
 };
 
 /**
+ * String enum
+ */
+export const createEnumParam = <T extends string>(
+  enumValues: T[]
+): QueryParamConfig<string | null | undefined, T | null | undefined> => ({
+  encode: Serialize.encodeString,
+  decode: input => Serialize.decodeEnum(input, enumValues),
+})
+
+/**
  * Numbers (integers or floats)
  */
 export const NumberParam: QueryParamConfig<

@@ -68,6 +68,17 @@ Examples in this table assume query parameter named `qp`.
 | DelimitedArrayParam | string[] | `['a','b','c']` | `?qp=a_b_c'` |
 | DelimitedNumericArrayParam | number[] | `[1, 2, 3]` | `?qp=1_2_3'` |
 
+**Enum Param**
+
+You can define enum param using `createEnumParam`. It works as `StringParam` but restricts decoded output to a list of allowed strings: 
+
+```js
+import { createEnumParam } from 'serialize-query-params';
+
+// values other than 'asc' or 'desc' will be decoded as undefined
+const SortOrderEnumParam = createEnumParam(['asc', 'desc'])
+```
+
 **Setting a default value**
 
 If you'd like to have a default value, you can wrap your param with `withDefault()`:
