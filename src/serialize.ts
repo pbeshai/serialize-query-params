@@ -254,6 +254,24 @@ export function decodeString(
 }
 
 /**
+ * Decodes an enum value while safely handling null and undefined values.
+ *
+ * If an array is provided, only the first entry is used.
+ *
+ * @param {String} input the encoded string
+ * @param {String[]} enumValues allowed enum values
+ * @return {String} the string value from enumValues
+ */
+export function decodeEnum<T extends string>(
+  input: string | (string | null)[] | null | undefined,
+  enumValues: T[]
+): T | null | undefined {
+  const str = decodeString(input)
+  if (str == null) return str
+  return enumValues.includes(str as any) ? str as T : undefined
+}
+
+/**
  * Encodes anything as a JSON string.
  *
  * @param {Any} any The thing to be encoded

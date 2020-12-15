@@ -9,6 +9,7 @@ export {
   decodeNumber,
   encodeString,
   decodeString,
+  decodeEnum,
   encodeJson,
   decodeJson,
   encodeArray,
@@ -38,6 +39,7 @@ export {
   NumericObjectParam,
   DelimitedArrayParam,
   DelimitedNumericArrayParam,
+  createEnumParam,
 } from './params';
 
 export {
