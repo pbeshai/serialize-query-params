@@ -72,9 +72,9 @@ export function updateInLocation(
   location: Location,
   stringifyOptions?: ExtendedStringifyOptions
 ): Location {
-  // if a query is there, use it, otherwise parse the search string
-  const currQuery =
-    (location as any).query || parseQueryString(location.search);
+  // explicitly avoid parsing numbers to ensure the
+  // return type has the same shape as EncodeQuery
+  const currQuery = parseQueryString(location.search, { parseNumbers: false }) as EncodedQuery;
 
   const newQuery = {
     ...currQuery,
