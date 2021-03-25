@@ -51,6 +51,6 @@
     "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "query-string": "^5.1.1 || ^6"
+    "query-string": "^5.1.1 || ^6 || ^7"
   }
 }
