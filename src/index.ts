@@ -70,7 +70,7 @@ if (process.env.NODE_ENV !== 'production' && typeof require === 'function') {
   // dev check.
   const validQueryStringInstalled =
     /^5.1.[1-9][0-9]*/.test(queryStringVersion) ||
-    /^6\./.test(queryStringVersion);
+    /^6\./.test(queryStringVersion) || /^7\./.test(queryStringVersion);
   if (!validQueryStringInstalled) {
     throw new Error(
       `serialize-query-params requires query-string ^5.1.1 || ^6, ` +
