@@ -1,4 +1,8 @@
 <div align="center">
+   <h1>Now part of a monorepo: <a href="https://github.com/pbeshai/use-query-params">use-query-params</a></h1>
+  <hr/>
+  <i>Old README</i>
+  <hr/>
   <h1>serialize-query-params</h1>
   <p>A library for simplifying encoding and decoding URL query parameters.
   </p>
